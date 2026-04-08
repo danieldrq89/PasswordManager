@@ -2,6 +2,8 @@ package core.manager;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
+
 import java.io.File;
 
 public class XmlManager {
@@ -22,7 +24,6 @@ public class XmlManager {
             // Configuración para que el XML sea legible
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-            // Guardamos en el archivo
             marshaller.marshal(data, new File(fileName));
 
             System.out.println("Objeto " + data.getClass().getSimpleName() + " guardado en " + fileName);
@@ -31,4 +32,21 @@ public class XmlManager {
             e.printStackTrace();
         }
     }
+
+    public static <T> T read(Class<T> clazz,String filename) {
+        try {
+
+            JAXBContext context = JAXBContext.newInstance(clazz);
+
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+
+            T dataToReturn = (T) unmarshaller.unmarshal(new File(filename));
+
+            return dataToReturn;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

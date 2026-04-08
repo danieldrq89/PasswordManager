@@ -1,7 +1,12 @@
 package ui;
 
+import core.manager.CryptoManager;
+import core.manager.XmlManager;
+import core.model.LoginUserList;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class LoginPanel extends JPanel {
     private JTextField userField;
@@ -42,10 +47,29 @@ public class LoginPanel extends JPanel {
 
         loginButton.addActionListener(e -> {
             String user = userField.getText();
-            char[] password = passField.getPassword();
-            System.out.println("Intentando login para: " + user);
-        });
+            char[] passwordChars = passField.getPassword();
+            String passwordStr = new String(passwordChars);
 
+            System.out.println("Intentando login para: " + user);
+
+            LoginUserList loginUserList = XmlManager.read(LoginUserList.class, "database_login.xml");
+
+            if (loginUserList != null) {
+                boolean checked = loginUserList.defaultLogin(user, passwordStr);
+                if (checked) {
+                    System.out.println("Successful login");
+                    setVisible(false);
+                    MainWindow principal = (MainWindow) SwingUtilities.getWindowAncestor(this);
+                    principal.mostrarGestor();
+                } else {
+                    System.out.println("Try again");
+                }
+            } else {
+                System.err.println("No se pudo cargar la base de datos.");
+            }
+            java.util.Arrays.fill(passwordChars, '0');
+
+        });
         add(loginButton, gbc);
     }
 }
