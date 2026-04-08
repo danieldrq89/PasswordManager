@@ -1,0 +1,12 @@
+ui/MainWindow.class
+ui/AddVaultPanel.class
+core/manager/XmlManager.class
+core/model/VaultEntryList.class
+Main.class
+core/model/LoginUserList.class
+ui/LoginPanel.class
+ui/PasswordManager.class
+core/model/VaultEntry.class
+core/model/LoginUser.class
+core/manager/CryptoManager.class
+core/DatabaseChecker.class
